@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="AwinSignupForm!">
+        <!-- That file builds the menu system, and our page will become an available link target. -->
+        <message><![CDATA[My first Joomla! page]]></message>
+    </layout>
+</metadata>
