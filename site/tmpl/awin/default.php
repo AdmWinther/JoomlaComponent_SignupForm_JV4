@@ -12,8 +12,9 @@
 defined('_JEXEC') or die('Restricted Access');
 ?>
 <div class="row justify-content-center">
-    <form class="col-lg-4" action="index.php?option=com_signupform&task=signup.forward" method="post">
-    <!-- <form class="col-lg-4" action="<?php echo JRoute::_('index.php?task=signup.forward'); ?>" method="post" name="signupForm" id="signupForm"> -->
+    <!-- <form class="col-lg-4" action="?option=com_awinsignupform&task=awin.submit" method="post" id="awinForm">-->
+    <!-- <form class="col-lg-4" action="<?php echo JRoute::_('index.php?task=signup.submit'); ?>" method="post" name="signupForm" id="signupForm">  -->
+    <form class="col-lg-4" action="http://localhost/joomla5/index.php?option=com_awinsignupform&task=awin.submit" method="post" name="signupForm" id="signupForm"> 
         <h2>Sign Up Form</h2>
 
         <label class="required form-label invalid" for="mydata">First Name:</label>
