@@ -5,6 +5,7 @@ namespace Thusia\Component\AwinSignupForm\Site\View\Awin;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Factory;
 
 /**
  * @package     Joomla.Site
@@ -27,6 +28,11 @@ class HtmlView extends BaseHtmlView {
      * @return  void
      */
     public function display($template = null) {
+
+
+        $session = Factory::getApplication()->getSession();
+        $this->formData = $session->get('awinsignupform.data', []);
+
         // Call the parent display to display the layout file
         parent::display($template);
     }

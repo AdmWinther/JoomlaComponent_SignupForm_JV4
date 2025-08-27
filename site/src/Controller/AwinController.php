@@ -15,37 +15,71 @@ class AwinController extends FormController
     public function submit()
     {
         // Get input
-        // $input = Factory::getApplication()->input;
-        // $data = [
-        //     'first_name' => $input->getString('first_name'),
-        //     'last_name'  => $input->getString('last_name'),
-        //     'email'      => $input->getString('email'),
-        // ];
+        $app = Factory::getApplication();
+        $input = $app->input;
 
-        // // Data validation here
+        $data = [
+            'firstName' => $input->getString('firstName'),
+            'lastName'  => $input->getString('lastName'),
+            'emailAddress'     => $input->getString('emailAddress'),
+            'password'  => $input->getString('password'),
+        ];
 
-        // // Convert to JSON
-        // $jsonData = json_encode($data);
+        $error = '';
+        // Data validation here
+        // First name must start with a letter and cannot be shorter than 2 characters
+        if (!preg_match('/^[a-zA-Z]{2,}/', $data['firstName'])) {
+            // echo new JsonResponse(['success' => false, 'error' => 'Invalid first name']);
+            $error = 'Invalid first name.';
+            $app->enqueueMessage($error, 'error');
+        }
+        // Last name must start with a letter and cannot be shorter than 2 characters
+        if (!preg_match('/^[a-zA-Z]{2,}/', $data['lastName'])) {
+            $error = "Invalid last name.";
+            $app->enqueueMessage($error, 'error');
+        }
 
-        // // Send POST request
-        // $http = Factory::getHttpFactory()->getHttp();
-        // $url = 'https://external-server.com/api/endpoint'; // Replace with your actual endpoint
+        // Email must be a valid email format
+        if (!filter_var($data['emailAddress'], FILTER_VALIDATE_EMAIL)) {
+            $error = "Invalid email address.";
+            $app->enqueueMessage($error, 'error');
+        }
 
-        // try {
-        //     $response = $http->post($url, $jsonData, ['Content-Type' => 'application/json']);
-        //     $body = $response->getBody();
+        // Password must be at least 6 characters long include a number, a lowercase letter an upper case letter and a special character
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/', $data['password'])) {
+            $error = "Invalid password, password must be at least 6 characters long and include a number, a lowercase letter, an uppercase letter, and a special character.".' '. $data['password'];
+        }
 
-        //     // Optionally handle response
-        //     echo new JsonResponse(['success' => true, 'response' => $body]);
-        // } catch (\Exception $e) {
-        //     echo new JsonResponse(['success' => false, 'error' => $e->getMessage()]);
-        // }
+        if ($error) {
+            // $app->enqueueMessage($error, 'error');
+            $session = Factory::getApplication()->getSession();
+            $session->set('awinsignupform.data', $data); // $data is your validated input array
+            $app->redirect('http://localhost/joomla5/index.php?option=com_awinsignupform&view=awin', false);
+            return;
+        }
 
-        // // Prevent Joomla from further processing
-        // Factory::getApplication()->close();
+        // Convert to JSON
+        $jsonData = json_encode($data);
 
-        echo new JsonResponse(['message' => 'Controller executed korrekhar']);
+        // Send POST request
+        $http = HttpFactory::getHttp();
+
+        $url = 'https://external-server.com/api/endpoint'; // Replace with your actual endpoint
+
+        try {
+            $response = $http->post($url, $jsonData, ['Content-Type' => 'application/json']);
+            $body = $response->getBody();
+
+            // Optionally handle response
+            echo new JsonResponse(['success' => true, 'response' => $body]);
+        } catch (\Exception $e) {
+            echo new JsonResponse(['success' => false, 'error' => $e->getMessage()]);
+        }
+
+
+        echo new JsonResponse(['message' => 'Form submitted successfully', 'data' => $data]);
+
+        // Prevent Joomla from further processing
         Factory::getApplication()->close();
-
     }
 }
