@@ -10,6 +10,9 @@ use Joomla\CMS\Extension\Service\Provider\MVCFactory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use Thusia\Component\Awinsignupform\Site\View\Success\HtmlView as SuccessView;
+
+
 
 return new class implements ServiceProviderInterface {
     
@@ -50,5 +53,18 @@ return new class implements ServiceProviderInterface {
                 ]);
             }
         );
+
+
+        // Register the Success view
+        $container->set(
+            SuccessView::class,
+            function (Container $container) {
+                return new SuccessView([
+                    'name' => 'success',
+                    'option' => 'com_awinsignupform',
+                ]);
+            }
+        );
+
     }
 };

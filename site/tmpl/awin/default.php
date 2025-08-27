@@ -15,19 +15,19 @@ defined('_JEXEC') or die('Restricted Access');
     <form class="col-lg-4" action="http://localhost/joomla5/index.php?option=com_awinsignupform&task=awin.submit" method="post" name="signupForm" id="signupForm"> 
         <h2>Sign Up Form</h2>
 
-        <label class="required form-label invalid" for="mydata">First Name:</label>
+        <label class="required form-label invalid" for="firstName" id="firstNameLabel">First Name:</label>
         <input type="text" name="firstName" id="firstName" required value="<?php echo htmlspecialchars($this->formData['firstName'] ?? '', ENT_QUOTES); ?>">
         </br>
 
-        <label class="required form-label invalid" for="mydata">Last Name:</label>
+        <label class="required form-label invalid" for="lastName" id="lastNameLabel">Last Name:</label>
         <input type="text" name="lastName" id="lastName" required value="<?php echo htmlspecialchars($this->formData['lastName'] ?? '', ENT_QUOTES); ?>">
         </br>
 
-        <label class="required form-label invalid" for="mydata">Email Address:</label>
+        <label class="required form-label invalid" for="emailAddress" id="emailAddressLabel">Email Address:</label>
         <input type="text" name="emailAddress" id="emailAddress" required value="<?php echo htmlspecialchars($this->formData['emailAddress'] ?? '', ENT_QUOTES); ?>">
         </br>
 
-        <label class="required form-label invalid" for="mydata">Password:</label>
+        <label class="required form-label invalid" for="password" id="passwordLabel">Password:</label>
         <input type="password" name="password" id="password" required>
         </br>
 

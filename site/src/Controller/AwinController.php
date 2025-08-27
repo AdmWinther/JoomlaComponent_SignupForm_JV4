@@ -1,6 +1,10 @@
 <?php
 
 namespace Thusia\Component\AwinSignupForm\Site\Controller;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Crypt\Crypt;
+
+
 
 defined('_JEXEC') or die;
 
@@ -18,11 +22,14 @@ class AwinController extends FormController
         $app = Factory::getApplication();
         $input = $app->input;
 
+        //Generate the hash for the password
+        $hashedPassword = Crypt::hash($input->getString('password'));
+
         $data = [
             'firstName' => $input->getString('firstName'),
             'lastName'  => $input->getString('lastName'),
             'emailAddress'     => $input->getString('emailAddress'),
-            'password'  => $input->getString('password'),
+            'password'  => $hashedPassword
         ];
 
         $error = '';
@@ -46,40 +53,44 @@ class AwinController extends FormController
         }
 
         // Password must be at least 6 characters long include a number, a lowercase letter an upper case letter and a special character
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/', $data['password'])) {
-            $error = "Invalid password, password must be at least 6 characters long and include a number, a lowercase letter, an uppercase letter, and a special character.".' '. $data['password'];
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?#&]{6,}$/', $data['password'])) {
+            $error = "Invalid password, password must be at least 6 characters long and include a number, a lowercase letter, an uppercase letter, and one of these special character: @$!%*?#&.".' '. $data['password'];
+            $app->enqueueMessage($error, 'error');
         }
 
-        if ($error) {
-            // $app->enqueueMessage($error, 'error');
+        if (strlen($error) > 0 ) {
             $session = Factory::getApplication()->getSession();
             $session->set('awinsignupform.data', $data); // $data is your validated input array
-            $app->redirect('http://localhost/joomla5/index.php?option=com_awinsignupform&view=awin', false);
+            $app->redirect(Route::_('index.php?option=com_awinsignupform&view=awin', false));
             return;
         }
 
         // Convert to JSON
-        $jsonData = json_encode($data);
+        // $jsonData = json_encode($data);
 
         // Send POST request
-        $http = HttpFactory::getHttp();
+        // $http = HttpFactory::getHttp();
 
         $url = 'https://external-server.com/api/endpoint'; // Replace with your actual endpoint
 
-        try {
-            $response = $http->post($url, $jsonData, ['Content-Type' => 'application/json']);
-            $body = $response->getBody();
+        // try {
+        //     $response = $http->post($url, $jsonData, ['Content-Type' => 'application/json']);
+        //     $body = $response->getBody();
 
-            // Optionally handle response
-            echo new JsonResponse(['success' => true, 'response' => $body]);
-        } catch (\Exception $e) {
-            echo new JsonResponse(['success' => false, 'error' => $e->getMessage()]);
-        }
+        //     // Optionally handle response
+        //     echo new JsonResponse(['success' => true, 'response' => $body]);
+        // } catch (\Exception $e) {
+        //     echo new JsonResponse(['success' => false, 'error' => $e->getMessage()]);
+        // }
 
 
-        echo new JsonResponse(['message' => 'Form submitted successfully', 'data' => $data]);
+        // echo new JsonResponse(['message' => 'Form submitted successfully', 'data' => $data]);
 
-        // Prevent Joomla from further processing
-        Factory::getApplication()->close();
+        // // Prevent Joomla from further processing
+        // Factory::getApplication()->close();
+        // $app->redirect("http://localhost/joomla5/index.php?option=com_awinsignupform&view=success", true);
+        $app->redirect(Route::_('index.php?option=com_awinsignupform&view=success', false));
+        return;
+
     }
 }
