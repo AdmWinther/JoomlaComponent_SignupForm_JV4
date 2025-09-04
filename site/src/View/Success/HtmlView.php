@@ -32,7 +32,7 @@ class HtmlView extends BaseHtmlView {
     public function display($template = null) {
 
 
-        $this->message = 'Signing up was successful! Please check your email to verify your account.';
+        $this->message = 'Signing up was successful! Please check your email to verify your account.NO.';
         // Call the parent display to display the layout file
         parent::display($template);
     }

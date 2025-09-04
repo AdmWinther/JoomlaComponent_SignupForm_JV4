@@ -12,7 +12,8 @@ use Joomla\CMS\Factory;
 defined('_JEXEC') or die('Restricted Access');
 ?>
 <div class="row justify-content-center">
-    <form class="col-lg-4" action="http://localhost/joomla5/index.php?option=com_awinsignupform&task=awin.submit" method="post" name="signupForm" id="signupForm"> 
+    <!-- <form class="col-lg-4" action="http://localhost/joomla5/index.php?option=com_awinsignupform&task=awin.submit" method="post" name="signupForm" id="signupForm">  -->
+    <form class="col-lg-4" action="https://www.awin.dk/index.php?option=com_awinsignupform&task=awin.submit" method="post" name="signupForm" id="signupForm"> 
         <h2>Sign Up Form</h2>
 
         <label class="required form-label invalid" for="firstName" id="firstNameLabel">First Name:</label>
