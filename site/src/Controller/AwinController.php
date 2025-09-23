@@ -108,13 +108,15 @@ class AwinController extends FormController
         
         // Get CRM domain from component configuration to start registering an account for the user in the CRM system
         $RestApiSignupUrl = ComponentHelper::getParams('com_awinsignupform')->get('ThusiaRestApiSingupUrl');
+        $RestApiSignupUrl = "https://api.awin.dk/signup";
 
         try {
-            $response = $http->post($url, $jsonData, ['Content-Type' => 'application/json']);
+            $response = $http->post($RestApiSignupUrl, $jsonData, ['Content-Type' => 'application/json']);
             $body = $response->getBody();
 
             // Optionally handle response
             echo new JsonResponse(['success' => true, 'response' => $body]);
+            $app->redirect('https://www.awin.dk/index.php?option=com_awinsignupform&view=success', false);
         } catch (\Exception $e) {
             echo new JsonResponse(['success' => false, 'error' => $e->getMessage()]);
         }
@@ -126,7 +128,6 @@ class AwinController extends FormController
         // Factory::getApplication()->close();
         // $app->redirect("http://localhost/joomla5/index.php?option=com_awinsignupform&view=success", true);
         // $app->redirect(Route::_('index.php?option=com_awinsignupform&view=success', false));
-        $app->redirect('https://www.awin.dk/index.php?option=com_awinsignupform&view=success', false);
         return;
 
     }
